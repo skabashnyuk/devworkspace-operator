@@ -22,6 +22,7 @@ import (
 
 	. "github.com/che-incubator/che-workspace-crd-operator/pkg/controller/workspace/config"
 	. "github.com/che-incubator/che-workspace-crd-operator/pkg/controller/workspace/model"
+	. "github.com/che-incubator/che-workspace-crd-operator/pkg/controller/workspace/utils"
 )
 
 func managePrerequisites(workspace *workspaceApi.Workspace) ([]runtime.Object, error) {
@@ -135,5 +136,56 @@ func managePrerequisites(workspace *workspaceApi.Workspace) ([]runtime.Object, e
 			},
 		},
 	}
+
+	isOS, err := IsOpenShift()
+	if err != nil {
+		return nil, err
+	}
+	if isOS {
+		k8sObjects = append(k8sObjects, &corev1.ConfigMap{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: "che-check-images-for-openshift",
+				Namespace: workspace.Namespace,
+			},
+			Data: map[string]string{
+				"checkContainerImageForOpenshift.sh": `#!/bin/sh
+USERNAME=$(whoami)
+if [ $? -ne 0 ]; then
+	if [ ! -w /etc/passwd ]; then 
+		echo "/etc/passwd should be completed with arbitrary user, but is not writeable"
+		ERROR="true" 
+	fi
+else
+	PASSWD_LINE=$(grep -e "^$USERNAME:" /etc/passwd)
+	HOME_DIR=$(echo "$PASSWD_LINE" | sed -n -e 's/^[^:][^:]*:[^:][^:]*:[^:][^:]*:[^:][^:]*:[^:][^:]*:\([^:][^:]*\):[^:][^:]*$/\1/p')
+	SHELL=$(echo "$PASSWD_LINE" | sed -n -e 's/^[^:][^:]*:[^:][^:]*:[^:][^:]*:[^:][^:]*:[^:][^:]*:[^:][^:]*:\([^:][^:]*\)$/\1/p')
+	echo "HOME_DIR=$HOME_DIR"      
+	echo "SHELL=$SHELL"
+	if [ "$HOME_DIR" = "" -o "$HOME_DIR" = "/" ]; then
+		if [ ! -w /etc/passwd ]; then 
+			echo "/etc/passwd should be modified to update home directory, but is not writeable"
+			ERROR="true"
+		fi
+	else
+		if [ ! -w "$HOME_DIR" ]; then
+			echo "Home directory should be writeable: $HOME_DIR"
+			ERROR="true" 
+		fi
+	fi
+	if [ "$SHELL" = "/sbin/nologin" ]; then
+		if [ ! -w /etc/passwd ]; then 
+			echo "/etc/passwd should be modified to set a valid login shell, but is not writeable"
+			ERROR="true" 
+		fi
+	fi
+fi
+if [ "$ERROR" != "" ]; then
+	exit 1
+fi
+`,
+			},
+		})
+	}
+
 	return k8sObjects, nil
 }

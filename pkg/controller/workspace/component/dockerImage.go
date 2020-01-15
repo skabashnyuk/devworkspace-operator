@@ -13,13 +13,15 @@
 package component
 
 import (
-	"github.com/eclipse/che-plugin-broker/model"
 	"regexp"
 	"strconv"
 	"strings"
 
+	"github.com/eclipse/che-plugin-broker/model"
+
 	workspaceApi "github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1"
 	k8sModelUtils "github.com/che-incubator/che-workspace-crd-operator/pkg/controller/modelutils/k8s"
+	. "github.com/che-incubator/che-workspace-crd-operator/pkg/controller/workspace/utils"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -64,6 +66,19 @@ func setupDockerImageComponent(names WorkspaceProperties, commands []workspaceAp
 
 	volumeMounts := createVolumeMounts(names, component.MountSources, component.Volumes, []model.Volume{})
 
+	isOS, err := IsOpenShift()
+	if err != nil {
+		return nil, err
+	}
+	if isOS {
+		volumeMounts = append(volumeMounts, corev1.VolumeMount{
+			Name:      "che-check-images-for-openshift-volume",
+			ReadOnly:  true,
+			MountPath: "/bin/checkContainerImageForOpenshift.sh",
+			SubPath:   "checkContainerImageForOpenshift.sh",
+		})
+	}
+
 	var envVars []corev1.EnvVar
 	for _, envVarDef := range component.Env {
 		envVars = append(envVars, corev1.EnvVar{
@@ -90,12 +105,34 @@ func setupDockerImageComponent(names WorkspaceProperties, commands []workspaceAp
 		},
 		VolumeMounts: volumeMounts,
 		Env:          append(envVars, commonEnvironmentVariables(names)...),
+		Lifecycle: &corev1.Lifecycle{
+			PostStart: &corev1.Handler{
+				Exec: &corev1.ExecAction{
+					Command: []string{
+						"/bin/sh",
+						"-c",
+						`
+						`,
+					},
+				},
+			},
+		},
 	}
 	if component.Command != nil {
 		container.Command = *component.Command
 	}
 	if component.Args != nil {
 		container.Args = *component.Args
+	}
+
+	if isOS {
+		container.Lifecycle = &corev1.Lifecycle{
+			PostStart: &corev1.Handler{
+				Exec: &corev1.ExecAction{
+					Command: []string{"/bin/checkContainerImageForOpenshift.sh"},
+				},
+			},
+		}
 	}
 
 	// TODO selector, etc ....

@@ -19,6 +19,7 @@ import (
 	workspaceApi "github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1"
 	. "github.com/che-incubator/che-workspace-crd-operator/pkg/controller/workspace/config"
 	. "github.com/che-incubator/che-workspace-crd-operator/pkg/controller/workspace/model"
+	. "github.com/che-incubator/che-workspace-crd-operator/pkg/controller/workspace/utils"
 	"github.com/eclipse/che-plugin-broker/model"
 	"github.com/google/uuid"
 	appsv1 "k8s.io/api/apps/v1"
@@ -68,6 +69,11 @@ func ConvertToCoreObjects(workspace *workspaceApi.Workspace) (*WorkspaceProperti
 	}
 
 	err = setupPersistentVolumeClaim(workspace, mainDeployment)
+	if err != nil {
+		return &workspaceProperties, nil, nil, nil, err
+	}
+
+	err = setupCheckScriptsConfigMap(mainDeployment)
 	if err != nil {
 		return &workspaceProperties, nil, nil, nil, err
 	}
@@ -161,6 +167,29 @@ func setupPersistentVolumeClaim(workspace *workspaceApi.Workspace, deployment *a
 			},
 		},
 	}
+	return nil
+}
+
+func setupCheckScriptsConfigMap(deployment *appsv1.Deployment) error {
+	isOS, err := IsOpenShift()
+	if err != nil {
+		return err
+	}
+	if isOS {
+		defaultMode := int32(448)
+		deployment.Spec.Template.Spec.Volumes = append(deployment.Spec.Template.Spec.Volumes, corev1.Volume{
+			Name: "che-check-images-for-openshift-volume",
+			VolumeSource: corev1.VolumeSource{
+				ConfigMap: &corev1.ConfigMapVolumeSource{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: "che-check-images-for-openshift",
+					},
+					DefaultMode: &defaultMode,
+				},
+			},
+		})
+	}
+
 	return nil
 }
 
