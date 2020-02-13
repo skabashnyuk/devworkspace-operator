@@ -48,6 +48,9 @@ github.com/boltdb/bolt v1.3.1/go.mod h1:clJnj/oiGkjum5o1McbSZDSLxVThjynRyGBgiAx2
 github.com/cespare/prettybench v0.0.0-20150116022406-03b8cfe5406c/go.mod h1:Xe6ZsFhtM8HrDku0pxJ3/Lr51rwykrzgFwpmTzleatY=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/chai2010/gettext-go v0.0.0-20160711120539-c6fed771bfd5/go.mod h1:/iP1qXHoty45bqomnu2LM+VVyAEdWN+vtSHGlQgyxbw=
+github.com/che-incubator/devworkspace-api v0.0.0-20200207090229-dc73eaf4b921 h1:JbaRx9o9UoWZE0AWskbzGkDR40rPY0GFGwbhoKh0K40=
+github.com/che-incubator/devworkspace-api v0.0.0-20200212144902-1a184540b62e h1:XWamA+rUzPFxaNyYR8UQYymb6iG2LLtN4eVBT2dl6uI=
+github.com/che-incubator/devworkspace-api v0.0.0-20200212144902-1a184540b62e/go.mod h1:dmYCUVIZ29i2TX7fabmHIg44frWXPPKQEBT2ElFdT3w=
 github.com/client9/misspell v0.0.0-20170928000206-9ce5d979ffda/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cloudflare/cfssl v0.0.0-20180726162950-56268a613adf/go.mod h1:yMWuSON2oQp+43nFtAV/uvKQIFpSPerB57DCt9t8sSA=
@@ -401,6 +404,7 @@ github.com/operator-framework/operator-marketplace v0.0.0-20190216021216-57300a3
 github.com/operator-framework/operator-registry v1.0.1/go.mod h1:1xEdZjjUg2hPEd52LG3YQ0jtwiwEGdm98S1TH5P4RAA=
 github.com/operator-framework/operator-registry v1.0.4/go.mod h1:hve6YwcjM2nGVlscLtNsp9sIIBkNZo6jlJgzWw7vP9s=
 github.com/operator-framework/operator-registry v1.1.1/go.mod h1:7D4WEwL+EKti5npUh4/u64DQhawCBRugp8Ql20duUb4=
+github.com/operator-framework/operator-sdk v0.12.0/go.mod h1:mW8isQxiXlLCVf2E+xqflkQAVLOTbiqjndKdkKIrR0M=
 github.com/operator-framework/operator-sdk v0.12.1-0.20191112211508-82fc57de5e5b h1:glsQcbiTFrXeqeTRS6zw6X35stTlOOnfnZssiuCdcSs=
 github.com/operator-framework/operator-sdk v0.12.1-0.20191112211508-82fc57de5e5b/go.mod h1:2TbIbI+vqHbFCbBCNNmttvvnJu8+JRqQpgakNocdwyo=
 github.com/pborman/uuid v1.2.0 h1:J7Q5mO4ysT1dv8hyrUGHb9+ooztCXu1D8MY8DZYsu3g=

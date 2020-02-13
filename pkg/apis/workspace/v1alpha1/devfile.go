@@ -27,7 +27,7 @@ type DevfileSpec struct {
 	Projects []ProjectSpec `json:"projects,omitempty"` // Description of the projects, containing names and sources locations
 
 	// List of components (editor, plugins, containers, ...) that will provide the workspace features
-	Components []ComponentSpec `json:"components"` // Description of the workspace components, such as editor and plugins
+	Components []ComponentSpec `json:"components,omitempty"` // Description of the workspace components, such as editor and plugins
 
 	// List of workspace-wide commands that can be associated to a given component, in order to run in the related container
 	Commands []CommandSpec `json:"commands,omitempty"` // Description of the predefined commands to be available in workspace

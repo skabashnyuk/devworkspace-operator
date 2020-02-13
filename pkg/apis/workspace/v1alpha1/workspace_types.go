@@ -14,6 +14,7 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	devworkspace "github.com/che-incubator/devworkspace-api/pkg/apis/workspaces/v1alpha1"
 )
 
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
@@ -52,7 +53,12 @@ type WorkspaceSpec struct {
 	RoutingClass string `json:"routingClass,omitempty"`
 	// Workspace Structure defined in the Devfile format syntax.
 	// For more details see the Che 7 documentation: https://www.eclipse.org/che/docs/che-7/making-a-workspace-portable-using-a-devfile/
-	Devfile DevfileSpec `json:"devfile"`
+	// +optional
+	Devfile DevfileSpec `json:"devfile,omitempty"`
+
+	// Optional DevWorkspaceTemplateSpec to try the controller with the new devworkspace structure
+	// +optional
+	Template *devworkspace.DevWorkspaceTemplateSpec `json:"template,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
