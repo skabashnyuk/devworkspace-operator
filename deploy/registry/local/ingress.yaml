@@ -16,7 +16,7 @@ metadata:
     kubernetes.io/ingress.class: nginx
 spec:
   rules:
-  - host: che-plugin-registry.192.168.99.100.nip.io
+  - host: che-plugin-registry.192.168.39.155.nip.io
     http:
       paths:
       - path: /

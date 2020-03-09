@@ -51,6 +51,8 @@ github.com/chai2010/gettext-go v0.0.0-20160711120539-c6fed771bfd5/go.mod h1:/iP1
 github.com/che-incubator/devworkspace-api v0.0.0-20200207090229-dc73eaf4b921 h1:JbaRx9o9UoWZE0AWskbzGkDR40rPY0GFGwbhoKh0K40=
 github.com/che-incubator/devworkspace-api v0.0.0-20200212144902-1a184540b62e h1:XWamA+rUzPFxaNyYR8UQYymb6iG2LLtN4eVBT2dl6uI=
 github.com/che-incubator/devworkspace-api v0.0.0-20200212144902-1a184540b62e/go.mod h1:dmYCUVIZ29i2TX7fabmHIg44frWXPPKQEBT2ElFdT3w=
+github.com/che-incubator/devworkspace-api v0.0.0-20200217140708-a18d057dafc2 h1:sCJBNQPqKTmhKKkI89qxC6JYBkQEK/gSlzSjD7AL3QQ=
+github.com/che-incubator/devworkspace-api v0.0.0-20200217140708-a18d057dafc2/go.mod h1:dmYCUVIZ29i2TX7fabmHIg44frWXPPKQEBT2ElFdT3w=
 github.com/client9/misspell v0.0.0-20170928000206-9ce5d979ffda/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cloudflare/cfssl v0.0.0-20180726162950-56268a613adf/go.mod h1:yMWuSON2oQp+43nFtAV/uvKQIFpSPerB57DCt9t8sSA=
@@ -113,6 +115,7 @@ github.com/eclipse/che-go-jsonrpc v0.0.0-20181205102516-87cdb8da2597 h1:OWSaGPBU
 github.com/eclipse/che-go-jsonrpc v0.0.0-20181205102516-87cdb8da2597/go.mod h1:6xlEQ1tM4Ago8A2jPjTrHy60Oy7Kv28DcefZPZMlwWE=
 github.com/eclipse/che-plugin-broker v3.0.0+incompatible h1:xTJ5z402IchIxv9M6hWiR3lyIJq76aXj1JhdCUl814c=
 github.com/eclipse/che-plugin-broker v3.0.0+incompatible/go.mod h1:V5mZYiAFCw8aQ3VCCs6a4FwO7qeVOLixY2baT6bMJI8=
+github.com/eclipse/che-plugin-broker v3.1.0+incompatible h1:0c7uEZcLt3R46sDlN2Mq2VY2ChI6Dzghy9X7EFut7ug=
 github.com/elazarl/go-bindata-assetfs v1.0.0/go.mod h1:v+YaWX3bdea5J/mo8dSETolEo7R71Vk1u8bnjau5yw4=
 github.com/elazarl/goproxy v0.0.0-20170405201442-c4fc26588b6e/go.mod h1:/Zj4wYkgs4iZTTu3o/KG3Itv/qCCa8VVMlb3i9OVuzc=
 github.com/elazarl/goproxy v0.0.0-20190421051319-9d40249d3c2f/go.mod h1:/Zj4wYkgs4iZTTu3o/KG3Itv/qCCa8VVMlb3i9OVuzc=
@@ -140,6 +143,7 @@ github.com/ghodss/yaml v0.0.0-20150909031657-73d445a93680/go.mod h1:4dBDuWmgqj2H
 github.com/ghodss/yaml v0.0.0-20180820084758-c7ce16629ff4/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/ghodss/yaml v1.0.0 h1:wQHKEahhL6wmXdzwWG11gIVCkOv05bNOh+Rxn0yngAk=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
+github.com/ghodss/yaml v1.0.1-0.20180820084758-c7ce16629ff4 h1:PaTU+9BARuIOAz1ixvps39DJjfq/SxOj3axzIlh7nFo=
 github.com/ghodss/yaml v1.0.1-0.20180820084758-c7ce16629ff4/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/globalsign/mgo v0.0.0-20180905125535-1ca0a4f7cbcb/go.mod h1:xkRDCp4j0OGD1HRkm4kmhM+pmpv3AKq5SU7GMg4oO/Q=
 github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8/go.mod h1:xkRDCp4j0OGD1HRkm4kmhM+pmpv3AKq5SU7GMg4oO/Q=
@@ -407,6 +411,7 @@ github.com/operator-framework/operator-registry v1.1.1/go.mod h1:7D4WEwL+EKti5np
 github.com/operator-framework/operator-sdk v0.12.0/go.mod h1:mW8isQxiXlLCVf2E+xqflkQAVLOTbiqjndKdkKIrR0M=
 github.com/operator-framework/operator-sdk v0.12.1-0.20191112211508-82fc57de5e5b h1:glsQcbiTFrXeqeTRS6zw6X35stTlOOnfnZssiuCdcSs=
 github.com/operator-framework/operator-sdk v0.12.1-0.20191112211508-82fc57de5e5b/go.mod h1:2TbIbI+vqHbFCbBCNNmttvvnJu8+JRqQpgakNocdwyo=
+github.com/operator-framework/operator-sdk v0.15.2 h1:VlxI0J+HLmMKs5k53drQ/B1AXhyNj0OaD2BbREt8Hnk=
 github.com/pborman/uuid v1.2.0 h1:J7Q5mO4ysT1dv8hyrUGHb9+ooztCXu1D8MY8DZYsu3g=
 github.com/pborman/uuid v1.2.0/go.mod h1:X/NO0urCmaxf9VXbdlT7C2Yzkj2IKimNn4k+gtPdI/k=
 github.com/pelletier/go-toml v1.0.1/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
@@ -750,6 +755,7 @@ modernc.org/xc v1.0.0/go.mod h1:mRNCo0bvLjGhHO9WsyuKVU4q0ceiDDDoEeWDJHrNx8I=
 sigs.k8s.io/controller-runtime v0.1.10/go.mod h1:HFAYoOh6XMV+jKF1UjFwrknPbowfyHEHHRdJMf2jMX8=
 sigs.k8s.io/controller-runtime v0.3.0 h1:ZtdgqJXVHsIytjdmDuk0QjagnzyLq9FjojXRqIp+dU4=
 sigs.k8s.io/controller-runtime v0.3.0/go.mod h1:Cw6PkEg0Sa7dAYovGT4R0tRkGhHXpYijwNxYhAnAZZk=
+sigs.k8s.io/controller-runtime v0.5.0 h1:CbqIy5fbUX+4E9bpnBFd204YAzRYlM9SWW77BbrcDQo=
 sigs.k8s.io/controller-tools v0.2.2/go.mod h1:8SNGuj163x/sMwydREj7ld5mIMJu1cDanIfnx6xsU70=
 sigs.k8s.io/kustomize v2.0.3+incompatible/go.mod h1:MkjgH3RdOWrievjo6c9T245dYlB5QeXV4WCbnt/PEpU=
 sigs.k8s.io/structured-merge-diff v0.0.0-20190302045857-e85c7b244fd2/go.mod h1:wWxsB5ozmmv/SG7nM11ayaAW51xMvak/t1r0CSlcokI=
