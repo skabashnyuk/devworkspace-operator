@@ -107,6 +107,11 @@ func setupDockerimageComponent(wkspCtx WorkspaceContext, commands []workspaceApi
 	}
 
 	componentInstanceStatus.Endpoints = component.Endpoints
+	for _, endpointDef := range componentInstanceStatus.Endpoints {
+		if endpointDef.Attributes != nil && endpointDef.Attributes[workspaceApi.PROTOCOL_ENDPOINT_ATTRIBUTE] == "" {
+			endpointDef.Attributes[workspaceApi.PROTOCOL_ENDPOINT_ATTRIBUTE] = "http"
+		}
+	}
 
 	containerAttributes := map[string]string{}
 	if limitAsInt64, canBeConverted := limit.AsInt64(); canBeConverted {

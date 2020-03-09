@@ -36,8 +36,11 @@ const (
 	//RuntimeAdditionalInfo is a key of workspaceStatus.AdditionalInfo where runtime info is stored
 	RuntimeAdditionalInfo = "org.eclipse.che.workspace/runtime"
 
-	//RuntimeAdditionalInfo is a key of workspaceStatus.AdditionalInfo info where component statuses info is stored
+	//ComponentStatusesAdditionalInfo is a key of workspaceStatus.AdditionalInfo info where component statuses info is stored
 	ComponentStatusesAdditionalInfo = "org.eclipse.che.workspace/componentstatuses"
+
+	//FlattenedDevfileAdditionalInfo is a key of workspaceStatus.AdditionalInfo info where the flattened devfile 1.0.0 is stored to be used by 
+	FlattenedDevfileAdditionalInfo = "org.eclipse.che.workspace/flattenedDevfile"
 
 	//WorkspaceIDLabel is label key to store workspace identifier
 	WorkspaceIDLabel = "che.workspace_id"
@@ -48,3 +51,4 @@ const (
 	//CheOriginalNameLabel is label key to original name
 	CheOriginalNameLabel = "che.original_name"
 )
+

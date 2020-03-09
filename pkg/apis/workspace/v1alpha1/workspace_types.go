@@ -71,5 +71,5 @@ type WorkspaceList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Workspace{}, &WorkspaceList{})
+	SchemeBuilder.Register(&Workspace{}, &WorkspaceList{}, &devworkspace.DevWorkspaceTemplate{}, &devworkspace.DevWorkspaceTemplateList{})
 }

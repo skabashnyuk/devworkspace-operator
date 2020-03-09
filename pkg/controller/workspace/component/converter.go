@@ -81,6 +81,11 @@ func ConvertToCoreObjects(workspace *workspaceApi.Workspace) (*WorkspaceContext,
 	}
 	wkspCtx.CheApiExternal = externalUrl
 
+	template, err := flattenDevWorkspaceTemplate(&wkspCtx, workspace.Spec.Template)
+	if template != nil {
+		completeDevfileFromDevworkspaceTemplate(template, &workspace.Spec.Devfile)
+	}
+
 	workspaceRouting, componentStatuses, k8sComponentsObjects, err := setupComponents(wkspCtx, workspace.Spec.Devfile, mainDeployment)
 	if err != nil {
 		return &wkspCtx, nil, nil, nil, err

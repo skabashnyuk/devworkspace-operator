@@ -122,9 +122,12 @@ public class ApiService {
                     Map<String, Object> additionalFields = asMap(status.get("additionalFields"));
                     if (additionalFields != null) {
                         runtimeAnnotation = (String) additionalFields.get("org.eclipse.che.workspace/runtime");
+                        devfileYaml = (String) additionalFields.get("org.eclipse.che.workspace/flattenedDevfile");
                     }
                 }
-                devfileYaml = readDevfileFromWorkspaceCustomResource(workspaceCustomResource);
+                if (devfileYaml == null || devfileYaml.isEmpty()) {
+                    devfileYaml = readDevfileFromWorkspaceCustomResource(workspaceCustomResource);
+                }
             }
         } catch (ApiException e) {
             throw new RuntimeException("Problem while retrieving the Workspace custom resource", e);

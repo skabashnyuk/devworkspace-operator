@@ -11,11 +11,11 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"./pkg/apis/workspace/v1alpha1.Workspace":              schema_pkg_apis_workspace_v1alpha1_Workspace(ref),
-		"./pkg/apis/workspace/v1alpha1.WorkspaceRouting":       schema_pkg_apis_workspace_v1alpha1_WorkspaceRouting(ref),
-		"./pkg/apis/workspace/v1alpha1.WorkspaceRoutingSpec":   schema_pkg_apis_workspace_v1alpha1_WorkspaceRoutingSpec(ref),
-		"./pkg/apis/workspace/v1alpha1.WorkspaceRoutingStatus": schema_pkg_apis_workspace_v1alpha1_WorkspaceRoutingStatus(ref),
-		"./pkg/apis/workspace/v1alpha1.WorkspaceSpec":          schema_pkg_apis_workspace_v1alpha1_WorkspaceSpec(ref),
+		"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.Workspace":              schema_pkg_apis_workspace_v1alpha1_Workspace(ref),
+		"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceRouting":       schema_pkg_apis_workspace_v1alpha1_WorkspaceRouting(ref),
+		"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceRoutingSpec":   schema_pkg_apis_workspace_v1alpha1_WorkspaceRoutingSpec(ref),
+		"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceRoutingStatus": schema_pkg_apis_workspace_v1alpha1_WorkspaceRoutingStatus(ref),
+		"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceSpec":          schema_pkg_apis_workspace_v1alpha1_WorkspaceSpec(ref),
 	}
 }
 
@@ -42,26 +42,27 @@ func schema_pkg_apis_workspace_v1alpha1_Workspace(ref common.ReferenceCallback) 
 					},
 					"metadata": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+							Description: "Standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
 						},
 					},
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Desired state of the workspace",
-							Ref:         ref("./pkg/apis/workspace/v1alpha1.WorkspaceSpec"),
+							Ref:         ref("github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Observed state of the workspace",
-							Ref:         ref("./pkg/apis/workspace/v1alpha1.WorkspaceStatus"),
+							Ref:         ref("github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"./pkg/apis/workspace/v1alpha1.WorkspaceSpec", "./pkg/apis/workspace/v1alpha1.WorkspaceStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceSpec", "github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
@@ -93,19 +94,19 @@ func schema_pkg_apis_workspace_v1alpha1_WorkspaceRouting(ref common.ReferenceCal
 					},
 					"spec": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("./pkg/apis/workspace/v1alpha1.WorkspaceRoutingSpec"),
+							Ref: ref("github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceRoutingSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
-							Ref: ref("./pkg/apis/workspace/v1alpha1.WorkspaceRoutingStatus"),
+							Ref: ref("github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceRoutingStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"./pkg/apis/workspace/v1alpha1.WorkspaceRoutingSpec", "./pkg/apis/workspace/v1alpha1.WorkspaceRoutingStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceRoutingSpec", "github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.WorkspaceRoutingStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
@@ -160,7 +161,7 @@ func schema_pkg_apis_workspace_v1alpha1_WorkspaceRoutingSpec(ref common.Referenc
 								Allows: true,
 								Schema: &spec.Schema{
 									SchemaProps: spec.SchemaProps{
-										Ref: ref("./pkg/apis/workspace/v1alpha1.ServiceDescription"),
+										Ref: ref("github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.ServiceDescription"),
 									},
 								},
 							},
@@ -171,7 +172,7 @@ func schema_pkg_apis_workspace_v1alpha1_WorkspaceRoutingSpec(ref common.Referenc
 			},
 		},
 		Dependencies: []string{
-			"./pkg/apis/workspace/v1alpha1.ServiceDescription"},
+			"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.ServiceDescription"},
 	}
 }
 
@@ -200,7 +201,7 @@ func schema_pkg_apis_workspace_v1alpha1_WorkspaceRoutingStatus(ref common.Refere
 										Items: &spec.SchemaOrArray{
 											Schema: &spec.Schema{
 												SchemaProps: spec.SchemaProps{
-													Ref: ref("./pkg/apis/workspace/v1alpha1.ExposedEndpoint"),
+													Ref: ref("github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.ExposedEndpoint"),
 												},
 											},
 										},
@@ -213,7 +214,7 @@ func schema_pkg_apis_workspace_v1alpha1_WorkspaceRoutingStatus(ref common.Refere
 			},
 		},
 		Dependencies: []string{
-			"./pkg/apis/workspace/v1alpha1.ExposedEndpoint"},
+			"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.ExposedEndpoint"},
 	}
 }
 
@@ -241,14 +242,20 @@ func schema_pkg_apis_workspace_v1alpha1_WorkspaceSpec(ref common.ReferenceCallba
 					"devfile": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Workspace Structure defined in the Devfile format syntax. For more details see the Che 7 documentation: https://www.eclipse.org/che/docs/che-7/making-a-workspace-portable-using-a-devfile/",
-							Ref:         ref("./pkg/apis/workspace/v1alpha1.DevfileSpec"),
+							Ref:         ref("github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.DevfileSpec"),
+						},
+					},
+					"template": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Optional DevWorkspaceTemplateSpec to try the controller with the new devworkspace structure",
+							Ref:         ref("github.com/che-incubator/devworkspace-api/pkg/apis/workspaces/v1alpha1.DevWorkspaceTemplateSpec"),
 						},
 					},
 				},
-				Required: []string{"started", "devfile"},
+				Required: []string{"started"},
 			},
 		},
 		Dependencies: []string{
-			"./pkg/apis/workspace/v1alpha1.DevfileSpec"},
+			"github.com/che-incubator/che-workspace-crd-operator/pkg/apis/workspace/v1alpha1.DevfileSpec", "github.com/che-incubator/devworkspace-api/pkg/apis/workspaces/v1alpha1.DevWorkspaceTemplateSpec"},
 	}
 }

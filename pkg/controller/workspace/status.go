@@ -25,6 +25,8 @@ import (
 
 	"reflect"
 
+	"sigs.k8s.io/yaml"
+
 	workspacev1alpha1 "github.com/che-incubator/che-workspace-operator/pkg/apis/workspace/v1alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -225,8 +227,14 @@ func (r *ReconcileWorkspace) updateStatusAfterWorkspaceChange(rs *reconcileStatu
 			rs.workspace.Status.AdditionalInfo[ComponentStatusesAdditionalInfo] = string(statusesAnnotation)
 		}
 
+		devfileAnnotation, err := yaml.Marshal(rs.workspace.Spec.Devfile)
+		if err != nil {
+			Log.Error(err, "")
+		}
+		rs.workspace.Status.AdditionalInfo[FlattenedDevfileAdditionalInfo] = string(devfileAnnotation)
+
 		rs.ReqLogger.V(1).Info("Status Update After Workspace Change : ", "status", rs.workspace.Status)
-		err := r.Status().Update(context.TODO(), rs.workspace)
+		err = r.Status().Update(context.TODO(), rs.workspace)
 		if err != nil {
 			Log.Error(err, "")
 		}

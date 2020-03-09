@@ -5,7 +5,9 @@ go 1.12
 // Che Plugin Broker v3.0.0
 require github.com/eclipse/che-plugin-broker v3.0.0+incompatible
 
-require github.com/che-incubator/devworkspace-api v0.0.0-20200212144902-1a184540b62e
+replace github.com/che-incubator/devworkspace-api => /home/dfestal/go/src/github.com/che-incubator/devworkspace-api
+
+require github.com/che-incubator/devworkspace-api v0.0.0-20200217140708-a18d057dafc2
 
 // Operator Framework 0.12.x
 require (
@@ -23,7 +25,9 @@ require (
 	k8s.io/apimachinery v0.0.0
 	k8s.io/client-go v11.0.0+incompatible
 	k8s.io/kube-openapi v0.0.0-20190918143330-0270cf2f1c1d
+	k8s.io/utils v0.0.0-20190506122338-8fab8cb257d5
 	sigs.k8s.io/controller-runtime v0.3.0
+	sigs.k8s.io/yaml v1.1.0
 )
 
 // Ovveride OpenShift API to be compatible with Go 1.13
