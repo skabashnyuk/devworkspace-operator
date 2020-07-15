@@ -8,7 +8,7 @@
 # SPDX-License-Identifier: EPL-2.0
 #
 set -ex
-
+# TEST
 # ENV used by PROW ci
 export CI="openshift"
 export ARTIFACTS_DIR="/tmp/artifacts"
