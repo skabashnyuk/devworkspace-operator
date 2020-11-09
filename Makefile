@@ -19,7 +19,7 @@ export PULL_POLICY ?= Always
 export WEBHOOK_ENABLED ?= true
 export DEFAULT_ROUTING ?= basic
 REGISTRY_ENABLED ?= true
-DEVWORKSPACE_API_VERSION ?= v1alpha1
+DEVWORKSPACE_API_VERSION ?= add-conversion-v1alpha1
 
 #internal params
 INTERNAL_TMP_DIR=/tmp/devworkspace-controller

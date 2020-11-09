@@ -18,11 +18,11 @@ require (
 	k8s.io/api v0.18.6
 	k8s.io/apimachinery v0.18.6
 	k8s.io/client-go v12.0.0+incompatible
-	sigs.k8s.io/controller-runtime v0.6.2
+	sigs.k8s.io/controller-runtime v0.6.3
 	sigs.k8s.io/yaml v1.2.0
 )
 
 // devfile/api requires v12.0.0+incompatible but this causes issues with go commands
 replace k8s.io/client-go => k8s.io/client-go v0.18.6
 
-replace github.com/devfile/api => github.com/amisevsk/devworkspace-api v0.0.0-20201020205654-257362dba943
+replace github.com/devfile/api => github.com/amisevsk/devworkspace-api v0.0.0-20201109183614-c07fa6a32584
