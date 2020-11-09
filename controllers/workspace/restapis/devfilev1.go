@@ -46,9 +46,9 @@ func devworkspaceTemplateToDevfileV1(template *devworkspace.DevWorkspaceTemplate
 	return devfile
 }
 
-func toDevfileCommand(c devworkspace.Command) *workspaceApi.CommandSpec {
+func toDevfileCommand(c devworkspace.Command) (*workspaceApi.CommandSpec, error) {
 	var commandSpec *workspaceApi.CommandSpec = nil
-	c.Visit(devworkspace.CommandVisitor{
+	err := c.Visit(devworkspace.CommandUnionVisitor{
 		Exec: func(cmd *devworkspace.ExecCommand) error {
 			name := cmd.Label
 			if name == "" {
@@ -92,8 +92,10 @@ func toDevfileCommand(c devworkspace.Command) *workspaceApi.CommandSpec {
 			return nil
 		},
 	})
-
-	return commandSpec
+	if err != nil {
+		return nil, err
+	}
+	return commandSpec, nil
 }
 
 func toDevfileEndpoints(eps []devworkspace.Endpoint) []workspaceApi.Endpoint {

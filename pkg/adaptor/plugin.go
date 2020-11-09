@@ -232,7 +232,7 @@ func getMetasForComponents(components []devworkspace.Component) (metas []brokerM
 			return nil, nil, err
 		}
 		metas = append(metas, *meta)
-		aliases[meta.ID] = component.Plugin.Name
+		aliases[meta.ID] = component.Name
 	}
 	err = utils.ResolveRelativeExtensionPaths(metas, defaultRegistry)
 	if err != nil {

@@ -55,10 +55,7 @@ func GetInitContainers(devfile v1alpha1.DevWorkspaceTemplateSpecContent) (initCo
 	}
 
 	for _, component := range components {
-		componentID, err := component.Key()
-		if err != nil {
-			return nil, nil, err
-		}
+		componentID := component.Key()
 		if initComponentKeys[componentID] {
 			initContainers = append(initContainers, component)
 			if mainComponentKeys[componentID] {

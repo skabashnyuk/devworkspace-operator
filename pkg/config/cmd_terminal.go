@@ -29,16 +29,17 @@ const (
 	defaultTerminalDockerimageProperty = "devworkspace.default_dockerimage.redhat-developer.web-terminal"
 )
 
-func (wc *ControllerConfig) GetDefaultTerminalDockerimage() (*devworkspace.ContainerComponent, error) {
+func (wc *ControllerConfig) GetDefaultTerminalDockerimage() (*devworkspace.Component, error) {
 	defaultDockerimageYaml := wc.GetProperty(defaultTerminalDockerimageProperty)
 	if defaultDockerimageYaml == nil {
 		webTerminalImage := images.GetWebTerminalToolingImage()
 		if webTerminalImage == "" {
 			return nil, fmt.Errorf("cannot determine default image for web terminal: environment variable is unset")
 		}
-		defaultTerminalDockerimage := &devworkspace.ContainerComponent{
+		defaultTerminalDockerimage := &devworkspace.Component{}
+		defaultTerminalDockerimage.Name = "dev"
+		defaultTerminalDockerimage.Container = &devworkspace.ContainerComponent{
 			Container: devworkspace.Container{
-				Name:        "dev",
 				Image:       webTerminalImage,
 				Args:        []string{"tail", "-f", "/dev/null"},
 				MemoryLimit: "256Mi",
@@ -53,7 +54,7 @@ func (wc *ControllerConfig) GetDefaultTerminalDockerimage() (*devworkspace.Conta
 		return defaultTerminalDockerimage, nil
 	}
 
-	var dockerimage devworkspace.ContainerComponent
+	var dockerimage devworkspace.Component
 	if err := yaml.Unmarshal([]byte(*defaultDockerimageYaml), &dockerimage); err != nil {
 		return nil, fmt.Errorf(
 			"%s is configured with invalid container component. Error: %s", defaultTerminalDockerimageProperty, err)

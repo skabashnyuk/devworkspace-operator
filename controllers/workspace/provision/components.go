@@ -139,11 +139,7 @@ func getSpecComponents(workspace *devworkspace.DevWorkspace, scheme *runtime.Sch
 				log.Error(err, fmt.Sprintf("Failed to provision default dockerimage component for '%s'", cmd_terminal.CommandLineTerminalPublisherName))
 				return nil, errors.New("configure dockerimage component or ask administrator to fix default one for " + cmd_terminal.CommandLineTerminalPublisherName)
 			}
-			dockerComponents = []devworkspace.Component{
-				{
-					Container: defaultContainer,
-				},
-			}
+			dockerComponents = []devworkspace.Component{*defaultContainer}
 		}
 	}
 

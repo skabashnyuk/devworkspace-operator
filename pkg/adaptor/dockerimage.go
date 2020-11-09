@@ -42,7 +42,7 @@ func adaptDockerimageComponent(workspaceId string, devfileComponent devworkspace
 	if err != nil {
 		return v1alpha1.ComponentDescription{}, nil
 	}
-	if devfileComponent.MountSources {
+	if devfileComponent.MountSources != nil && *devfileComponent.MountSources {
 		container.VolumeMounts = append(container.VolumeMounts, GetProjectSourcesVolumeMount(workspaceId))
 	}
 

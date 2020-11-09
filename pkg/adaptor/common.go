@@ -22,7 +22,7 @@ import (
 
 func SortComponentsByType(components []devworkspace.Component) (dockerimages []devworkspace.Component, plugins []devworkspace.Component, err error) {
 	for _, component := range components {
-		err := component.Visit(devworkspace.ComponentVisitor{
+		err := component.Visit(devworkspace.ComponentUnionVisitor{
 			Plugin: func(plugin *devworkspace.PluginComponent) error {
 				plugins = append(plugins, component)
 				return nil
