@@ -37,11 +37,11 @@ func (wc *ControllerConfig) GetDefaultTerminalDockerimage() (*devworkspace.Conta
 			return nil, fmt.Errorf("cannot determine default image for web terminal: environment variable is unset")
 		}
 		defaultTerminalDockerimage := &devworkspace.ContainerComponent{
-			MemoryLimit: "256Mi",
 			Container: devworkspace.Container{
-				Name:  "dev",
-				Image: webTerminalImage,
-				Args:  []string{"tail", "-f", "/dev/null"},
+				Name:        "dev",
+				Image:       webTerminalImage,
+				Args:        []string{"tail", "-f", "/dev/null"},
+				MemoryLimit: "256Mi",
 				Env: []devworkspace.EnvVar{
 					{
 						Name:  "PS1",
