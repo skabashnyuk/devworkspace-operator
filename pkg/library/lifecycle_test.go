@@ -18,7 +18,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/devfile/api/pkg/apis/workspaces/v1alpha1"
+	v1alpha1 "github.com/devfile/api/pkg/apis/workspaces/v1alpha2"
 	"github.com/stretchr/testify/assert"
 	"sigs.k8s.io/yaml"
 )

@@ -14,8 +14,7 @@ package library
 
 import (
 	"fmt"
-
-	"github.com/devfile/api/pkg/apis/workspaces/v1alpha1"
+	v1alpha1 "github.com/devfile/api/pkg/apis/workspaces/v1alpha2"
 )
 
 // GetInitContainers partitions the components in a devfile's flattened spec into initContainer and non-initContainer lists

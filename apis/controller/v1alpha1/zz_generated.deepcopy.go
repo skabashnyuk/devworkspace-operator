@@ -17,7 +17,7 @@
 package v1alpha1
 
 import (
-	workspacesv1alpha1 "github.com/devfile/api/pkg/apis/workspaces/v1alpha1"
+	workspacesv1alpha1 "github.com/devfile/api/pkg/apis/workspaces/v1alpha2"
 	v1 "k8s.io/api/core/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
