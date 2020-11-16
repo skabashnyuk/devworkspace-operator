@@ -25,4 +25,4 @@ require (
 // devfile/api requires v12.0.0+incompatible but this causes issues with go commands
 replace k8s.io/client-go => k8s.io/client-go v0.18.6
 
-replace github.com/devfile/api => github.com/amisevsk/devworkspace-api v0.0.0-20201109230729-13b8062bb48e
+replace github.com/devfile/api => /home/dfestal/go/src/github.com/devfile/api
