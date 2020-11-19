@@ -34,7 +34,7 @@ spec:
             - name: HOSTED_PLUGIN_PORT
               value: "3130"
             - name: THEIA_HOST
-              value: 127.0.0.1
+              value: O.0.0.0
           volumeMounts:
             - path: "/plugins"
               name: plugins
@@ -64,15 +64,15 @@ spec:
               protocol: http
               attributes:
                 type: ide-dev
-            - name: "theia-redirect-1"
+            - name: "theia-redir-1"
               exposure: public
               targetPort: 13131
               protocol: http
-            - name: "theia-redirect-2"
+            - name: "theia-redir-2"
               exposure: public
               targetPort: 13132
               protocol: http
-            - name: "theia-redirect-3"
+            - name: "theia-redir-3"
               exposure: public
               targetPort: 13133
               protocol: http      
@@ -121,7 +121,7 @@ spec:
           image: "quay.io/eclipse/che-machine-exec:7.20.0"
           command: ['/go/bin/che-machine-exec', '--url', '0.0.0.0:4444']
           endpoints:
-            - name: "che-machine-exec"
+            - name: "che-mach-exec"
               exposure: public
               targetPort: 4444
               protocol: ws
