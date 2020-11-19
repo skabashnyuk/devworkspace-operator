@@ -40,12 +40,13 @@ spec:
                   properties:
                     attributes:
                       additionalProperties:
-                        type: string
+                        x-kubernetes-preserve-unknown-fields: true
                       description: "Map of implementation-dependant string-based free-form\
                         \ attributes. \n Examples of Che-specific attributes: \n -\
                         \ cookiesAuthEnabled: \"true\" / \"false\", \n - type: \"\
                         terminal\" / \"ide\" / \"ide-dev\","
                       type: object
+                      x-kubernetes-preserve-unknown-fields: true
                     exposure:
                       description: "Describes how the endpoint should be exposed on\
                         \ the network. \n - `public` means that the endpoint will\
@@ -83,6 +84,11 @@ spec:
                         \ Endpoint will have traffic on an UDP connection, without\
                         \ specifying an application protocol. \n Default value is\
                         \ `http`"
+                      enum:
+                        - http
+                        - ws
+                        - tcp
+                        - udp
                       type: string
                     secure:
                       description: Describes whether the endpoint should be secured
@@ -92,6 +98,7 @@ spec:
                       type: integer
                   required:
                     - name
+                    - targetPort
                   type: object
                 type: array
               description: Machines to endpoints map

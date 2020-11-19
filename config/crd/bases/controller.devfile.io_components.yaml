@@ -48,12 +48,6 @@ spec:
                       \ command exist for a given component, it is assumed the component\
                       \ will be applied at workspace start by default."
                     properties:
-                      attributes:
-                        additionalProperties:
-                          type: string
-                        description: Optional map of free-form additional command
-                          attributes
-                        type: object
                       component:
                         description: Describes component that will be applied
                         type: string
@@ -75,18 +69,19 @@ spec:
                         required:
                           - kind
                         type: object
-                      id:
-                        description: Mandatory identifier that allows referencing
-                          this command in composite commands, from a parent, or in
-                          events.
-                        type: string
                       label:
                         description: Optional label that provides a label for this
                           command to be used in Editor UI menus for example
                         type: string
                     required:
-                      - id
+                      - component
                     type: object
+                  attributes:
+                    additionalProperties:
+                      x-kubernetes-preserve-unknown-fields: true
+                    description: Map of implementation-dependant free-form YAML attributes.
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
                   commandType:
                     description: Type of workspace command
                     enum:
@@ -101,12 +96,6 @@ spec:
                     description: Composite command that allows executing several sub-commands
                       either sequentially or concurrently
                     properties:
-                      attributes:
-                        additionalProperties:
-                          type: string
-                        description: Optional map of free-form additional command
-                          attributes
-                        type: object
                       commands:
                         description: The commands that comprise this composite command
                         items:
@@ -130,11 +119,6 @@ spec:
                         required:
                           - kind
                         type: object
-                      id:
-                        description: Mandatory identifier that allows referencing
-                          this command in composite commands, from a parent, or in
-                          events.
-                        type: string
                       label:
                         description: Optional label that provides a label for this
                           command to be used in Editor UI menus for example
@@ -143,20 +127,12 @@ spec:
                         description: Indicates if the sub-commands should be executed
                           concurrently
                         type: boolean
-                    required:
-                      - id
                     type: object
                   custom:
                     description: Custom command whose logic is implementation-dependant
                       and should be provided by the user possibly through some dedicated
                       plugin
                     properties:
-                      attributes:
-                        additionalProperties:
-                          type: string
-                        description: Optional map of free-form additional command
-                          attributes
-                        type: object
                       commandClass:
                         description: Class of command that the associated implementation
                           component should use to process this command with the appropriate
@@ -187,11 +163,6 @@ spec:
                         required:
                           - kind
                         type: object
-                      id:
-                        description: Mandatory identifier that allows referencing
-                          this command in composite commands, from a parent, or in
-                          events.
-                        type: string
                       label:
                         description: Optional label that provides a label for this
                           command to be used in Editor UI menus for example
@@ -199,24 +170,18 @@ spec:
                     required:
                       - commandClass
                       - embeddedResource
-                      - id
                     type: object
                   exec:
                     description: CLI Command executed in an existing component container
                     properties:
-                      attributes:
-                        additionalProperties:
-                          type: string
-                        description: Optional map of free-form additional command
-                          attributes
-                        type: object
                       commandLine:
                         description: "The actual command-line string \n Special variables\
                           \ that can be used: \n  - `$PROJECTS_ROOT`: A path where\
-                          \ projects sources are mounted \n  - `$PROJECT_SOURCE`:\
-                          \ A path to a project source ($PROJECTS_ROOT/<project-name>).\
-                          \ If there are multiple projects, this will point to the\
-                          \ directory of the first one."
+                          \ projects sources are mounted as defined by container component's\
+                          \ sourceMapping. \n  - `$PROJECT_SOURCE`: A path to a project\
+                          \ source ($PROJECTS_ROOT/<project-name>). If there are multiple\
+                          \ projects, this will point to the directory of the first\
+                          \ one."
                         type: string
                       component:
                         description: Describes component to which given action relates
@@ -259,11 +224,6 @@ spec:
                           \ won't be restarted and it is expected to handle file changes\
                           \ on its own. \n Default value is `false`"
                         type: boolean
-                      id:
-                        description: Mandatory identifier that allows referencing
-                          this command in composite commands, from a parent, or in
-                          events.
-                        type: string
                       label:
                         description: Optional label that provides a label for this
                           command to be used in Editor UI menus for example
@@ -271,25 +231,24 @@ spec:
                       workingDir:
                         description: "Working directory where the command should be\
                           \ executed \n Special variables that can be used: \n  -\
-                          \ `${PROJECTS_ROOT}`: A path where projects sources are\
-                          \ mounted \n  - `${PROJECT_SOURCE}`: A path to a project\
-                          \ source (${PROJECTS_ROOT}/<project-name>). If there are\
-                          \ multiple projects, this will point to the directory of\
-                          \ the first one."
+                          \ `$PROJECTS_ROOT`: A path where projects sources are mounted\
+                          \ as defined by container component's sourceMapping. \n\
+                          \  - `$PROJECT_SOURCE`: A path to a project source ($PROJECTS_ROOT/<project-name>).\
+                          \ If there are multiple projects, this will point to the\
+                          \ directory of the first one."
                         type: string
                     required:
-                      - id
+                      - commandLine
+                      - component
                     type: object
+                  id:
+                    description: Mandatory identifier that allows referencing this
+                      command in composite commands, from a parent, or in events.
+                    type: string
                   vscodeLaunch:
                     description: Command providing the definition of a VsCode launch
                       action
                     properties:
-                      attributes:
-                        additionalProperties:
-                          type: string
-                        description: Optional map of free-form additional command
-                          attributes
-                        type: object
                       group:
                         description: Defines the group this command is part of
                         properties:
@@ -308,11 +267,6 @@ spec:
                         required:
                           - kind
                         type: object
-                      id:
-                        description: Mandatory identifier that allows referencing
-                          this command in composite commands, from a parent, or in
-                          events.
-                        type: string
                       inlined:
                         description: Inlined content of the VsCode configuration
                         type: string
@@ -326,18 +280,10 @@ spec:
                         description: Location as an absolute of relative URI the VsCode
                           configuration will be fetched from
                         type: string
-                    required:
-                      - id
                     type: object
                   vscodeTask:
                     description: Command providing the definition of a VsCode Task
                     properties:
-                      attributes:
-                        additionalProperties:
-                          type: string
-                        description: Optional map of free-form additional command
-                          attributes
-                        type: object
                       group:
                         description: Defines the group this command is part of
                         properties:
@@ -356,11 +302,6 @@ spec:
                         required:
                           - kind
                         type: object
-                      id:
-                        description: Mandatory identifier that allows referencing
-                          this command in composite commands, from a parent, or in
-                          events.
-                        type: string
                       inlined:
                         description: Inlined content of the VsCode configuration
                         type: string
@@ -374,15 +315,21 @@ spec:
                         description: Location as an absolute of relative URI the VsCode
                           configuration will be fetched from
                         type: string
-                    required:
-                      - id
                     type: object
+                required:
+                  - id
                 type: object
               type: array
             components:
               description: List of devfile components to be processed by this component
               items:
                 properties:
+                  attributes:
+                    additionalProperties:
+                      x-kubernetes-preserve-unknown-fields: true
+                    description: Map of implementation-dependant free-form YAML attributes.
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
                   componentType:
                     description: Type of component
                     enum:
@@ -423,13 +370,14 @@ spec:
                           properties:
                             attributes:
                               additionalProperties:
-                                type: string
+                                x-kubernetes-preserve-unknown-fields: true
                               description: "Map of implementation-dependant string-based\
                                 \ free-form attributes. \n Examples of Che-specific\
                                 \ attributes: \n - cookiesAuthEnabled: \"true\" /\
                                 \ \"false\", \n - type: \"terminal\" / \"ide\" / \"\
                                 ide-dev\","
                               type: object
+                              x-kubernetes-preserve-unknown-fields: true
                             exposure:
                               description: "Describes how the endpoint should be exposed\
                                 \ on the network. \n - `public` means that the endpoint\
@@ -469,6 +417,11 @@ spec:
                                 \ an application protocol. \n - `udp`: Endpoint will\
                                 \ have traffic on an UDP connection, without specifying\
                                 \ an application protocol. \n Default value is `http`"
+                              enum:
+                                - http
+                                - ws
+                                - tcp
+                                - udp
                               type: string
                             secure:
                               description: Describes whether the endpoint should be
@@ -478,10 +431,13 @@ spec:
                               type: integer
                           required:
                             - name
+                            - targetPort
                           type: object
                         type: array
                       env:
-                        description: Environment variables used in this container
+                        description: "Environment variables used in this container.\
+                          \ \n The following variables are reserved and cannot be\
+                          \ overridden via env: \n  - `$PROJECTS_ROOT` \n  - `$PROJECT_SOURCE`"
                         items:
                           properties:
                             name:
@@ -498,14 +454,16 @@ spec:
                       memoryLimit:
                         type: string
                       mountSources:
+                        description: "Toggles whether or not the project source code\
+                          \ should be mounted in the component. \n Defaults to true\
+                          \ for all component types except plugins and components\
+                          \ that set `dedicatedPod` to true."
                         type: boolean
-                      name:
-                        type: string
                       sourceMapping:
                         description: Optional specification of the path in the container
                           where project sources should be transferred/mounted when
-                          `mountSources` is `true`. When omitted, the value of the
-                          `PROJECTS_ROOT` environment variable is used.
+                          `mountSources` is `true`. When omitted, the default value
+                          of /projects is used.
                         type: string
                       volumeMounts:
                         description: List of volumes mounts that should be mounted
@@ -531,7 +489,7 @@ spec:
                           type: object
                         type: array
                     required:
-                      - name
+                      - image
                     type: object
                   custom:
                     description: Custom component whose logic is implementation-dependant
@@ -550,14 +508,9 @@ spec:
                         type: object
                         x-kubernetes-embedded-resource: true
                         x-kubernetes-preserve-unknown-fields: true
-                      name:
-                        description: Mandatory name that allows referencing the component
-                          in commands, or inside a parent
-                        type: string
                     required:
                       - componentClass
                       - embeddedResource
-                      - name
                     type: object
                   kubernetes:
                     description: Allows importing into the workspace the Kubernetes
@@ -570,13 +523,14 @@ spec:
                           properties:
                             attributes:
                               additionalProperties:
-                                type: string
+                                x-kubernetes-preserve-unknown-fields: true
                               description: "Map of implementation-dependant string-based\
                                 \ free-form attributes. \n Examples of Che-specific\
                                 \ attributes: \n - cookiesAuthEnabled: \"true\" /\
                                 \ \"false\", \n - type: \"terminal\" / \"ide\" / \"\
                                 ide-dev\","
                               type: object
+                              x-kubernetes-preserve-unknown-fields: true
                             exposure:
                               description: "Describes how the endpoint should be exposed\
                                 \ on the network. \n - `public` means that the endpoint\
@@ -616,6 +570,11 @@ spec:
                                 \ an application protocol. \n - `udp`: Endpoint will\
                                 \ have traffic on an UDP connection, without specifying\
                                 \ an application protocol. \n Default value is `http`"
+                              enum:
+                                - http
+                                - ws
+                                - tcp
+                                - udp
                               type: string
                             secure:
                               description: Describes whether the endpoint should be
@@ -625,6 +584,7 @@ spec:
                               type: integer
                           required:
                             - name
+                            - targetPort
                           type: object
                         type: array
                       inlined:
@@ -636,16 +596,15 @@ spec:
                           - Uri
                           - Inlined
                         type: string
-                      name:
-                        description: Mandatory name that allows referencing the component
-                          in commands, or inside a parent
-                        type: string
                       uri:
                         description: Location in a file fetched from a uri.
                         type: string
-                    required:
-                      - name
                     type: object
+                  name:
+                    description: Mandatory name that allows referencing the component
+                      from other elements (such as commands) or from an external devfile
+                      that may reference this component through a parent or a plugin.
+                    type: string
                   openshift:
                     description: Allows importing into the workspace the OpenShift
                       resources defined in a given manifest. For example this allows
@@ -657,13 +616,14 @@ spec:
                           properties:
                             attributes:
                               additionalProperties:
-                                type: string
+                                x-kubernetes-preserve-unknown-fields: true
                               description: "Map of implementation-dependant string-based\
                                 \ free-form attributes. \n Examples of Che-specific\
                                 \ attributes: \n - cookiesAuthEnabled: \"true\" /\
                                 \ \"false\", \n - type: \"terminal\" / \"ide\" / \"\
                                 ide-dev\","
                               type: object
+                              x-kubernetes-preserve-unknown-fields: true
                             exposure:
                               description: "Describes how the endpoint should be exposed\
                                 \ on the network. \n - `public` means that the endpoint\
@@ -703,6 +663,11 @@ spec:
                                 \ an application protocol. \n - `udp`: Endpoint will\
                                 \ have traffic on an UDP connection, without specifying\
                                 \ an application protocol. \n Default value is `http`"
+                              enum:
+                                - http
+                                - ws
+                                - tcp
+                                - udp
                               type: string
                             secure:
                               description: Describes whether the endpoint should be
@@ -712,6 +677,7 @@ spec:
                               type: integer
                           required:
                             - name
+                            - targetPort
                           type: object
                         type: array
                       inlined:
@@ -723,15 +689,9 @@ spec:
                           - Uri
                           - Inlined
                         type: string
-                      name:
-                        description: Mandatory name that allows referencing the component
-                          in commands, or inside a parent
-                        type: string
                       uri:
                         description: Location in a file fetched from a uri.
                         type: string
-                    required:
-                      - name
                     type: object
                   plugin:
                     description: "Allows importing a plugin. \n Plugins are mainly\
@@ -742,8 +702,8 @@ spec:
                     properties:
                       commands:
                         description: Overrides of commands encapsulated in a parent
-                          devfile or a plugin. Overriding is done using a strategic
-                          merge patch
+                          devfile or a plugin. Overriding is done according to K8S
+                          strategic merge patch standard rules.
                         items:
                           properties:
                             apply:
@@ -758,12 +718,6 @@ spec:
                                 \ it is assumed the component will be applied at workspace\
                                 \ start by default."
                               properties:
-                                attributes:
-                                  additionalProperties:
-                                    type: string
-                                  description: Optional map of free-form additional
-                                    command attributes
-                                  type: object
                                 component:
                                   description: Describes component that will be applied
                                   type: string
@@ -784,21 +738,12 @@ spec:
                                         - test
                                         - debug
                                       type: string
-                                  required:
-                                    - kind
                                   type: object
-                                id:
-                                  description: Mandatory identifier that allows referencing
-                                    this command in composite commands, from a parent,
-                                    or in events.
-                                  type: string
                                 label:
                                   description: Optional label that provides a label
                                     for this command to be used in Editor UI menus
                                     for example
                                   type: string
-                              required:
-                                - id
                               type: object
                             commandType:
                               description: Type of workspace command
@@ -808,18 +753,11 @@ spec:
                                 - VscodeTask
                                 - VscodeLaunch
                                 - Composite
-                                - Custom
                               type: string
                             composite:
                               description: Composite command that allows executing
                                 several sub-commands either sequentially or concurrently
                               properties:
-                                attributes:
-                                  additionalProperties:
-                                    type: string
-                                  description: Optional map of free-form additional
-                                    command attributes
-                                  type: object
                                 commands:
                                   description: The commands that comprise this composite
                                     command
@@ -843,14 +781,7 @@ spec:
                                         - test
                                         - debug
                                       type: string
-                                  required:
-                                    - kind
                                   type: object
-                                id:
-                                  description: Mandatory identifier that allows referencing
-                                    this command in composite commands, from a parent,
-                                    or in events.
-                                  type: string
                                 label:
                                   description: Optional label that provides a label
                                     for this command to be used in Editor UI menus
@@ -860,85 +791,20 @@ spec:
                                   description: Indicates if the sub-commands should
                                     be executed concurrently
                                   type: boolean
-                              required:
-                                - id
-                              type: object
-                            custom:
-                              description: Custom command whose logic is implementation-dependant
-                                and should be provided by the user possibly through
-                                some dedicated plugin
-                              properties:
-                                attributes:
-                                  additionalProperties:
-                                    type: string
-                                  description: Optional map of free-form additional
-                                    command attributes
-                                  type: object
-                                commandClass:
-                                  description: Class of command that the associated
-                                    implementation component should use to process
-                                    this command with the appropriate logic
-                                  type: string
-                                embeddedResource:
-                                  description: Additional free-form configuration
-                                    for this custom command that the implementation
-                                    component will know how to use
-                                  type: object
-                                  x-kubernetes-embedded-resource: true
-                                  x-kubernetes-preserve-unknown-fields: true
-                                group:
-                                  description: Defines the group this command is part
-                                    of
-                                  properties:
-                                    isDefault:
-                                      description: Identifies the default command
-                                        for a given group kind
-                                      type: boolean
-                                    kind:
-                                      description: Kind of group the command is part
-                                        of
-                                      enum:
-                                        - build
-                                        - run
-                                        - test
-                                        - debug
-                                      type: string
-                                  required:
-                                    - kind
-                                  type: object
-                                id:
-                                  description: Mandatory identifier that allows referencing
-                                    this command in composite commands, from a parent,
-                                    or in events.
-                                  type: string
-                                label:
-                                  description: Optional label that provides a label
-                                    for this command to be used in Editor UI menus
-                                    for example
-                                  type: string
-                              required:
-                                - commandClass
-                                - embeddedResource
-                                - id
                               type: object
                             exec:
                               description: CLI Command executed in an existing component
                                 container
                               properties:
-                                attributes:
-                                  additionalProperties:
-                                    type: string
-                                  description: Optional map of free-form additional
-                                    command attributes
-                                  type: object
                                 commandLine:
                                   description: "The actual command-line string \n\
                                     \ Special variables that can be used: \n  - `$PROJECTS_ROOT`:\
-                                    \ A path where projects sources are mounted \n\
-                                    \  - `$PROJECT_SOURCE`: A path to a project source\
-                                    \ ($PROJECTS_ROOT/<project-name>). If there are\
-                                    \ multiple projects, this will point to the directory\
-                                    \ of the first one."
+                                    \ A path where projects sources are mounted as\
+                                    \ defined by container component's sourceMapping.\
+                                    \ \n  - `$PROJECT_SOURCE`: A path to a project\
+                                    \ source ($PROJECTS_ROOT/<project-name>). If there\
+                                    \ are multiple projects, this will point to the\
+                                    \ directory of the first one."
                                   type: string
                                 component:
                                   description: Describes component to which given
@@ -955,7 +821,6 @@ spec:
                                         type: string
                                     required:
                                       - name
-                                      - value
                                     type: object
                                   type: array
                                 group:
@@ -975,8 +840,6 @@ spec:
                                         - test
                                         - debug
                                       type: string
-                                  required:
-                                    - kind
                                   type: object
                                 hotReloadCapable:
                                   description: "Whether the command is capable to\
@@ -985,11 +848,6 @@ spec:
                                     \ it is expected to handle file changes on its\
                                     \ own. \n Default value is `false`"
                                   type: boolean
-                                id:
-                                  description: Mandatory identifier that allows referencing
-                                    this command in composite commands, from a parent,
-                                    or in events.
-                                  type: string
                                 label:
                                   description: Optional label that provides a label
                                     for this command to be used in Editor UI menus
@@ -998,25 +856,24 @@ spec:
                                 workingDir:
                                   description: "Working directory where the command\
                                     \ should be executed \n Special variables that\
-                                    \ can be used: \n  - `${PROJECTS_ROOT}`: A path\
-                                    \ where projects sources are mounted \n  - `${PROJECT_SOURCE}`:\
-                                    \ A path to a project source (${PROJECTS_ROOT}/<project-name>).\
-                                    \ If there are multiple projects, this will point\
-                                    \ to the directory of the first one."
+                                    \ can be used: \n  - `$PROJECTS_ROOT`: A path\
+                                    \ where projects sources are mounted as defined\
+                                    \ by container component's sourceMapping. \n \
+                                    \ - `$PROJECT_SOURCE`: A path to a project source\
+                                    \ ($PROJECTS_ROOT/<project-name>). If there are\
+                                    \ multiple projects, this will point to the directory\
+                                    \ of the first one."
                                   type: string
-                              required:
-                                - id
                               type: object
+                            id:
+                              description: Mandatory identifier that allows referencing
+                                this command in composite commands, from a parent,
+                                or in events.
+                              type: string
                             vscodeLaunch:
                               description: Command providing the definition of a VsCode
                                 launch action
                               properties:
-                                attributes:
-                                  additionalProperties:
-                                    type: string
-                                  description: Optional map of free-form additional
-                                    command attributes
-                                  type: object
                                 group:
                                   description: Defines the group this command is part
                                     of
@@ -1034,14 +891,7 @@ spec:
                                         - test
                                         - debug
                                       type: string
-                                  required:
-                                    - kind
                                   type: object
-                                id:
-                                  description: Mandatory identifier that allows referencing
-                                    this command in composite commands, from a parent,
-                                    or in events.
-                                  type: string
                                 inlined:
                                   description: Inlined content of the VsCode configuration
                                   type: string
@@ -1056,19 +906,11 @@ spec:
                                   description: Location as an absolute of relative
                                     URI the VsCode configuration will be fetched from
                                   type: string
-                              required:
-                                - id
                               type: object
                             vscodeTask:
                               description: Command providing the definition of a VsCode
                                 Task
                               properties:
-                                attributes:
-                                  additionalProperties:
-                                    type: string
-                                  description: Optional map of free-form additional
-                                    command attributes
-                                  type: object
                                 group:
                                   description: Defines the group this command is part
                                     of
@@ -1086,14 +928,7 @@ spec:
                                         - test
                                         - debug
                                       type: string
-                                  required:
-                                    - kind
                                   type: object
-                                id:
-                                  description: Mandatory identifier that allows referencing
-                                    this command in composite commands, from a parent,
-                                    or in events.
-                                  type: string
                                 inlined:
                                   description: Inlined content of the VsCode configuration
                                   type: string
@@ -1108,19 +943,19 @@ spec:
                                   description: Location as an absolute of relative
                                     URI the VsCode configuration will be fetched from
                                   type: string
-                              required:
-                                - id
                               type: object
+                          required:
+                            - id
                           type: object
                         type: array
                       components:
-                        description: Overrides of components encapsulated in a plugin.
-                          Overriding is done using a strategic merge patch. A plugin
-                          cannot override embedded plugin components.
+                        description: Overrides of components encapsulated in a parent
+                          devfile or a plugin. Overriding is done according to K8S
+                          strategic merge patch standard rules.
                         items:
                           properties:
                             componentType:
-                              description: Type of component override for a plugin
+                              description: Type of component
                               enum:
                                 - Container
                                 - Kubernetes
@@ -1128,8 +963,8 @@ spec:
                                 - Volume
                               type: string
                             container:
-                              description: Configuration overriding for a Container
-                                component in a plugin
+                              description: Allows adding and configuring workspace-related
+                                containers
                               properties:
                                 args:
                                   description: "The arguments to supply to the command\
@@ -1160,7 +995,7 @@ spec:
                                     properties:
                                       attributes:
                                         additionalProperties:
-                                          type: string
+                                          x-kubernetes-preserve-unknown-fields: true
                                         description: "Map of implementation-dependant\
                                           \ string-based free-form attributes. \n\
                                           \ Examples of Che-specific attributes: \n\
@@ -1168,6 +1003,7 @@ spec:
                                           , \n - type: \"terminal\" / \"ide\" / \"\
                                           ide-dev\","
                                         type: object
+                                        x-kubernetes-preserve-unknown-fields: true
                                       exposure:
                                         description: "Describes how the endpoint should\
                                           \ be exposed on the network. \n - `public`\
@@ -1215,6 +1051,11 @@ spec:
                                           \ on an UDP connection, without specifying\
                                           \ an application protocol. \n Default value\
                                           \ is `http`"
+                                        enum:
+                                          - http
+                                          - ws
+                                          - tcp
+                                          - udp
                                         type: string
                                       secure:
                                         description: Describes whether the endpoint
@@ -1228,8 +1069,10 @@ spec:
                                     type: object
                                   type: array
                                 env:
-                                  description: Environment variables used in this
-                                    container
+                                  description: "Environment variables used in this\
+                                    \ container. \n The following variables are reserved\
+                                    \ and cannot be overridden via env: \n  - `$PROJECTS_ROOT`\
+                                    \ \n  - `$PROJECT_SOURCE`"
                                   items:
                                     properties:
                                       name:
@@ -1238,7 +1081,6 @@ spec:
                                         type: string
                                     required:
                                       - name
-                                      - value
                                     type: object
                                   type: array
                                 image:
@@ -1246,15 +1088,18 @@ spec:
                                 memoryLimit:
                                   type: string
                                 mountSources:
+                                  description: "Toggles whether or not the project\
+                                    \ source code should be mounted in the component.\
+                                    \ \n Defaults to true for all component types\
+                                    \ except plugins and components that set `dedicatedPod`\
+                                    \ to true."
                                   type: boolean
-                                name:
-                                  type: string
                                 sourceMapping:
                                   description: Optional specification of the path
                                     in the container where project sources should
                                     be transferred/mounted when `mountSources` is
-                                    `true`. When omitted, the value of the `PROJECTS_ROOT`
-                                    environment variable is used.
+                                    `true`. When omitted, the default value of /projects
+                                    is used.
                                   type: string
                                 volumeMounts:
                                   description: List of volumes mounts that should
@@ -1280,19 +1125,19 @@ spec:
                                       - name
                                     type: object
                                   type: array
-                              required:
-                                - name
                               type: object
                             kubernetes:
-                              description: Configuration overriding for a Kubernetes
-                                component in a plugin
+                              description: Allows importing into the workspace the
+                                Kubernetes resources defined in a given manifest.
+                                For example this allows reusing the Kubernetes definitions
+                                used to deploy some runtime components in production.
                               properties:
                                 endpoints:
                                   items:
                                     properties:
                                       attributes:
                                         additionalProperties:
-                                          type: string
+                                          x-kubernetes-preserve-unknown-fields: true
                                         description: "Map of implementation-dependant\
                                           \ string-based free-form attributes. \n\
                                           \ Examples of Che-specific attributes: \n\
@@ -1300,6 +1145,7 @@ spec:
                                           , \n - type: \"terminal\" / \"ide\" / \"\
                                           ide-dev\","
                                         type: object
+                                        x-kubernetes-preserve-unknown-fields: true
                                       exposure:
                                         description: "Describes how the endpoint should\
                                           \ be exposed on the network. \n - `public`\
@@ -1347,6 +1193,11 @@ spec:
                                           \ on an UDP connection, without specifying\
                                           \ an application protocol. \n Default value\
                                           \ is `http`"
+                                        enum:
+                                          - http
+                                          - ws
+                                          - tcp
+                                          - udp
                                         type: string
                                       secure:
                                         description: Describes whether the endpoint
@@ -1368,26 +1219,28 @@ spec:
                                     - Uri
                                     - Inlined
                                   type: string
-                                name:
-                                  description: Mandatory name that allows referencing
-                                    the component in commands, or inside a parent
-                                  type: string
                                 uri:
                                   description: Location in a file fetched from a uri.
                                   type: string
-                              required:
-                                - name
                               type: object
+                            name:
+                              description: Mandatory name that allows referencing
+                                the component from other elements (such as commands)
+                                or from an external devfile that may reference this
+                                component through a parent or a plugin.
+                              type: string
                             openshift:
-                              description: Configuration overriding for an OpenShift
-                                component in a plugin
+                              description: Allows importing into the workspace the
+                                OpenShift resources defined in a given manifest. For
+                                example this allows reusing the OpenShift definitions
+                                used to deploy some runtime components in production.
                               properties:
                                 endpoints:
                                   items:
                                     properties:
                                       attributes:
                                         additionalProperties:
-                                          type: string
+                                          x-kubernetes-preserve-unknown-fields: true
                                         description: "Map of implementation-dependant\
                                           \ string-based free-form attributes. \n\
                                           \ Examples of Che-specific attributes: \n\
@@ -1395,6 +1248,7 @@ spec:
                                           , \n - type: \"terminal\" / \"ide\" / \"\
                                           ide-dev\","
                                         type: object
+                                        x-kubernetes-preserve-unknown-fields: true
                                       exposure:
                                         description: "Describes how the endpoint should\
                                           \ be exposed on the network. \n - `public`\
@@ -1442,6 +1296,11 @@ spec:
                                           \ on an UDP connection, without specifying\
                                           \ an application protocol. \n Default value\
                                           \ is `http`"
+                                        enum:
+                                          - http
+                                          - ws
+                                          - tcp
+                                          - udp
                                         type: string
                                       secure:
                                         description: Describes whether the endpoint
@@ -1463,31 +1322,20 @@ spec:
                                     - Uri
                                     - Inlined
                                   type: string
-                                name:
-                                  description: Mandatory name that allows referencing
-                                    the component in commands, or inside a parent
-                                  type: string
                                 uri:
                                   description: Location in a file fetched from a uri.
                                   type: string
-                              required:
-                                - name
                               type: object
                             volume:
-                              description: Configuration overriding for a Volume component
-                                in a plugin
+                              description: Allows specifying the definition of a volume
+                                shared by several other components
                               properties:
-                                name:
-                                  description: Mandatory name that allows referencing
-                                    the Volume component in Container volume mounts
-                                    or inside a parent
-                                  type: string
                                 size:
                                   description: Size of the volume
                                   type: string
-                              required:
-                                - name
                               type: object
+                          required:
+                            - name
                           type: object
                         type: array
                       id:
@@ -1512,11 +1360,6 @@ spec:
                         required:
                           - name
                         type: object
-                      name:
-                        description: Optional name that allows referencing the component
-                          in commands, or inside a parent If omitted it will be infered
-                          from the location (uri or registryEntry)
-                        type: string
                       registryUrl:
                         type: string
                       uri:
@@ -1527,18 +1370,46 @@ spec:
                     description: Allows specifying the definition of a volume shared
                       by several other components
                     properties:
-                      name:
-                        description: Mandatory name that allows referencing the Volume
-                          component in Container volume mounts or inside a parent
-                        type: string
                       size:
                         description: Size of the volume
                         type: string
-                    required:
-                      - name
                     type: object
+                required:
+                  - name
                 type: object
               type: array
+            events:
+              description: Events
+              properties:
+                postStart:
+                  description: Names of commands that should be executed after the
+                    workspace is completely started. In the case of Che-Theia, these
+                    commands should be executed after all plugins and extensions have
+                    started, including project cloning. This means that those commands
+                    are not triggered until the user opens the IDE in his browser.
+                  items:
+                    type: string
+                  type: array
+                postStop:
+                  description: Names of commands that should be executed after stopping
+                    the workspace.
+                  items:
+                    type: string
+                  type: array
+                preStart:
+                  description: Names of commands that should be executed before the
+                    workspace start. Kubernetes-wise, these commands would typically
+                    be executed in init containers of the workspace POD.
+                  items:
+                    type: string
+                  type: array
+                preStop:
+                  description: Names of commands that should be executed before stopping
+                    the workspace.
+                  items:
+                    type: string
+                  type: array
+              type: object
             workspaceId:
               description: Id of workspace that contains this component
               type: string
@@ -1618,13 +1489,14 @@ spec:
                           properties:
                             attributes:
                               additionalProperties:
-                                type: string
+                                x-kubernetes-preserve-unknown-fields: true
                               description: "Map of implementation-dependant string-based\
                                 \ free-form attributes. \n Examples of Che-specific\
                                 \ attributes: \n - cookiesAuthEnabled: \"true\" /\
                                 \ \"false\", \n - type: \"terminal\" / \"ide\" / \"\
                                 ide-dev\","
                               type: object
+                              x-kubernetes-preserve-unknown-fields: true
                             exposure:
                               description: "Describes how the endpoint should be exposed\
                                 \ on the network. \n - `public` means that the endpoint\
@@ -1664,6 +1536,11 @@ spec:
                                 \ an application protocol. \n - `udp`: Endpoint will\
                                 \ have traffic on an UDP connection, without specifying\
                                 \ an application protocol. \n Default value is `http`"
+                              enum:
+                                - http
+                                - ws
+                                - tcp
+                                - udp
                               type: string
                             secure:
                               description: Describes whether the endpoint should be
@@ -1673,6 +1550,7 @@ spec:
                               type: integer
                           required:
                             - name
+                            - targetPort
                           type: object
                         type: array
                     type: object
