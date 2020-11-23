@@ -98,20 +98,6 @@ func (r *DevWorkspaceReconciler) Reconcile(req ctrl.Request) (reconcileResult ct
 		return reconcile.Result{}, err
 	}
 
-	if len(workspace.Spec.Template.Components) == 1 {
-		componentAttributes := workspace.Spec.Template.Components[0].Attributes
-		stringAttribute := componentAttributes.GetString("stringAttribute")
-		print("stringAttribute", stringAttribute)
-		arrayAttribute := componentAttributes.Get("arrayAttribute")
-		print("arrayAttribute", arrayAttribute)
-		objectAttribute := componentAttributes.Get("objectAttribute")
-		print("objectAttribute", objectAttribute)
-
-		if componentAttributes.Get("nonExisting") == nil {
-			print("This Works !")
-		}
-	}
-
 	if workspace.DeletionTimestamp != nil {
 		reqLogger.V(5).Info("Skipping reconcile of deleted resource")
 		return reconcile.Result{}, nil
