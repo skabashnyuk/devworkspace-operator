@@ -95,7 +95,7 @@ func (w *K8sClient) WaitSAToken(namespace, serviceAccount string) (token string,
 }
 
 func (w *K8sClient) getSAToken(namespace string, serviceAccount string) (string, error) {
-	secrets, err := w.kubeClient.CoreV1().Secrets(namespace).List(context.TODO(), metav1.ListOptions{})
+	secrets, err := w.kubeClient.CoreV1().Secrets(namespace).List(metav1.ListOptions{})
 	if err != nil {
 		return "", err
 	}

@@ -13,7 +13,6 @@
 package client
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -27,7 +26,7 @@ import (
 
 //CreateNamespace creates a new namespace
 func (w *K8sClient) CreateNamespace(namespace string) error {
-	_, err := w.kubeClient.CoreV1().Namespaces().Create(context.TODO(), &corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: namespace}}, metav1.CreateOptions{})
+	_, err := w.kubeClient.CoreV1().Namespaces().Create(&corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: namespace}})
 	if k8sErrors.IsAlreadyExists(err) {
 		return nil
 	}
@@ -36,7 +35,7 @@ func (w *K8sClient) CreateNamespace(namespace string) error {
 
 //DeleteNamespace deletes a namespace
 func (w *K8sClient) DeleteNamespace(namespace string) error {
-	return w.kubeClient.CoreV1().Namespaces().Delete(context.TODO(), namespace, metav1.DeleteOptions{})
+	return w.kubeClient.CoreV1().Namespaces().Delete(namespace, &metav1.DeleteOptions{})
 }
 
 //WaitNamespaceIsTerminated waits until namespace that is marked to be removed, is fully cleaned up
@@ -54,7 +53,7 @@ func (w *K8sClient) WaitNamespaceIsTerminated(namespace string) (err error) {
 			return errors.New(fmt.Sprintf("The namespace %s is not terminated and removed after %ds.", namespace, timeout))
 		case <-tickC:
 			var ns *corev1.Namespace
-			ns, err = w.kubeClient.CoreV1().Namespaces().Get(context.TODO(), namespace, metav1.GetOptions{})
+			ns, err = w.kubeClient.CoreV1().Namespaces().Get(namespace, metav1.GetOptions{})
 			if err != nil {
 				if k8sErrors.IsNotFound(err) {
 					return nil

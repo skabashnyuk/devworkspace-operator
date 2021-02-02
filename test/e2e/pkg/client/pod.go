@@ -13,7 +13,6 @@
 package client
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -66,7 +65,7 @@ func (w *K8sClient) WaitForRunningPodBySelector(namespace, selector string, time
 // Returns the list of currently scheduled or running pods in `namespace` with the given selector
 func (w *K8sClient) ListPods(namespace, selector string) (*v1.PodList, error) {
 	listOptions := metav1.ListOptions{LabelSelector: selector}
-	podList, err := w.Kube().CoreV1().Pods(namespace).List(context.TODO(), listOptions)
+	podList, err := w.Kube().CoreV1().Pods(namespace).List(listOptions)
 
 	if err != nil {
 		return nil, err
@@ -84,7 +83,7 @@ func (w *K8sClient) waitForPodRunning(namespace, podName string, timeout time.Du
 // currently running
 func (w *K8sClient) isPodRunning(podName, namespace string) wait.ConditionFunc {
 	return func() (bool, error) {
-		pod, _ := w.Kube().CoreV1().Pods(namespace).Get(context.TODO(), podName, metav1.GetOptions{})
+		pod, _ := w.Kube().CoreV1().Pods(namespace).Get(podName, metav1.GetOptions{})
 		age := time.Since(pod.GetCreationTimestamp().Time).Seconds()
 
 		switch pod.Status.Phase {

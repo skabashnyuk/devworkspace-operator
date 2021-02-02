@@ -10,7 +10,7 @@ subjects:
 - kind: ServiceAccount
   name: devworkspace-controller
   # Namespace must be replaced with controller's namespace
-  namespace: ${NAMESPACE}
+  namespace: devworkspace-controller
 roleRef:
   kind: ClusterRole
   name: devworkspace-controller
