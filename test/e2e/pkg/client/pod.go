@@ -13,27 +13,27 @@
 package client
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"log"
 	"time"
-
-	"github.com/devfile/devworkspace-operator/test/e2e/pkg/config"
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 )
 
-func (w *K8sClient) WaitForPodRunningByLabel(label string) (deployed bool, err error) {
+func (w *K8sClient) WaitForPodRunningByLabel(namespace, label string) (deployed bool, err error) {
 	timeout := time.After(6 * time.Minute)
 	tick := time.Tick(1 * time.Second)
 
 	for {
 		select {
 		case <-timeout:
-			return false, errors.New("timed out")
+			return false, errors.New("timed out for waiting pod by label " + label)
 		case <-tick:
-			err := w.WaitForRunningPodBySelector(config.Namespace, label, 3*time.Minute)
+			err = w.WaitForRunningPodBySelector(namespace, label, 3*time.Minute)
 			if err == nil {
 				return true, nil
 			}
@@ -49,13 +49,12 @@ func (w *K8sClient) WaitForRunningPodBySelector(namespace, selector string, time
 		return err
 	}
 	if len(podList.Items) == 0 {
-		fmt.Println("Pod not created yet with selector " + selector + " in namespace " + namespace)
-
+		log.Printf("Pod not created yet with selector '%s' in namespace %s", selector, namespace)
 		return fmt.Errorf("Pod not created yet in %s with label %s", namespace, selector)
 	}
 
 	for _, pod := range podList.Items {
-		fmt.Println("Pod " + pod.Name + " created in namespace " + namespace + "...Checking startup data.")
+		log.Printf("Pod '%s' created in namespace %s... Checking startup data.", pod.Name, namespace)
 		if err := w.waitForPodRunning(namespace, pod.Name, timeout); err != nil {
 			return err
 		}
@@ -67,7 +66,7 @@ func (w *K8sClient) WaitForRunningPodBySelector(namespace, selector string, time
 // Returns the list of currently scheduled or running pods in `namespace` with the given selector
 func (w *K8sClient) ListPods(namespace, selector string) (*v1.PodList, error) {
 	listOptions := metav1.ListOptions{LabelSelector: selector}
-	podList, err := w.Kube().CoreV1().Pods(namespace).List(listOptions)
+	podList, err := w.Kube().CoreV1().Pods(namespace).List(context.TODO(), listOptions)
 
 	if err != nil {
 		return nil, err
@@ -85,16 +84,31 @@ func (w *K8sClient) waitForPodRunning(namespace, podName string, timeout time.Du
 // currently running
 func (w *K8sClient) isPodRunning(podName, namespace string) wait.ConditionFunc {
 	return func() (bool, error) {
-		pod, _ := w.Kube().CoreV1().Pods(namespace).Get(podName, metav1.GetOptions{})
+		pod, _ := w.Kube().CoreV1().Pods(namespace).Get(context.TODO(), podName, metav1.GetOptions{})
 		age := time.Since(pod.GetCreationTimestamp().Time).Seconds()
 
 		switch pod.Status.Phase {
 		case v1.PodRunning:
-			fmt.Println("Pod started after", age, "seconds")
+			log.Printf("Pod started after %f seconds", age)
 			return true, nil
 		case v1.PodFailed, v1.PodSucceeded:
 			return false, nil
 		}
 		return false, nil
 	}
+}
+
+// GetPodNameBySelector returns the pod name that matches selector
+// error is returned when
+func (w *K8sClient) GetPodNameBySelector(selector, namespace string) (string, error) {
+	podList, err := w.ListPods(namespace, selector)
+
+	if err != nil {
+		return "", err
+	}
+	if len(podList.Items) == 0 {
+		return "", errors.New(fmt.Sprintf("There is no pod that matches '%s' in namespace %s ", selector, namespace))
+	}
+	// we expect just 1 pod in test namespace and return the first value from the list
+	return podList.Items[0].Name, nil
 }

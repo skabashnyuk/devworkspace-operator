@@ -13,6 +13,7 @@ DEFAULT_ROUTING ?= basic
 ADMIN_CTX ?= ""
 REGISTRY_ENABLED ?= true
 DEVWORKSPACE_API_VERSION ?= v1alpha1
+export KUBECONFIG ?= ${HOME}/.kube/config
 
 #internal params
 INTERNAL_TMP_DIR=/tmp/devworkspace-controller
@@ -316,8 +317,14 @@ endif
 test:
 	go test $(shell go list ./... | grep -v test/e2e)
 
-### test_e2e: runs e2e test on the cluster set in context. Includes deploying devworkspace-controller, run test workspace, uninstall devworkspace-controller
-test_e2e: _print_vars _set_ctx _update_yamls update_devworkspace_crds _do_e2e_test _reset_yamls _reset_ctx
+### test_e2e: runs e2e test on the cluster set in context. DevWorkspace Operator must be already deployed
+test_e2e:
+	CGO_ENABLED=0 go test -v -c -o bin/devworkspace-controller-e2e ./test/e2e/cmd/workspaces_test.go
+	./bin/devworkspace-controller-e2e -ginkgo.failFast
+
+### test_e2e_debug: runs e2e test in debug mode, so it's possible to connect to execution via remote debugger
+test_e2e_debug:
+	dlv test --listen=:2345 --headless=true --api-version=2 ./test/e2e/cmd/workspaces_test.go -- --ginkgo.failFast
 
 ### fmt: format all go files in repository
 fmt:
