@@ -14,15 +14,17 @@ package webhook
 
 import (
 	"context"
+	"os"
 
 	"github.com/devfile/devworkspace-operator/webhook/server"
 
+	internalController "github.com/devfile/devworkspace-operator/internal/controller"
 	"github.com/devfile/devworkspace-operator/internal/images"
-
 	"github.com/devfile/devworkspace-operator/pkg/config"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	crclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -33,7 +35,7 @@ func CreateWebhookServerDeployment(
 	ctx context.Context,
 	namespace string) error {
 
-	deployment, err := getSpecDeployment(namespace)
+	deployment, err := getSpecDeployment(namespace, client)
 	if err != nil {
 		return err
 	}
@@ -58,7 +60,7 @@ func CreateWebhookServerDeployment(
 	return nil
 }
 
-func getSpecDeployment(namespace string) (*appsv1.Deployment, error) {
+func getSpecDeployment(namespace string, client crclient.Client) (*appsv1.Deployment, error) {
 	replicas := int32(1)
 	terminationGracePeriod := int64(1)
 	trueBool := true
@@ -73,11 +75,21 @@ func getSpecDeployment(namespace string) (*appsv1.Deployment, error) {
 		return nil, err
 	}
 
+	log.Info("Finding the correct owner references")
+	ref, err := internalController.FindControllerOwner(context.TODO(), client)
+	if err != nil {
+		log.Error(err, "Failed to get the ownerref")
+		os.Exit(1)
+	}
+	log.Info("Adding the owner refs to the deploment")
+	log.Info("refs", ref)
+
 	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      server.WebhookServerDeploymentName,
-			Namespace: namespace,
-			Labels:    server.WebhookServerAppLabels(),
+			Name:            server.WebhookServerDeploymentName,
+			Namespace:       namespace,
+			Labels:          server.WebhookServerAppLabels(),
+			OwnerReferences: []metav1.OwnerReference{*ref},
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: &replicas,
@@ -89,9 +101,10 @@ func getSpecDeployment(namespace string) (*appsv1.Deployment, error) {
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Name:      server.WebhookServerDeploymentName,
-					Namespace: namespace,
-					Labels:    server.WebhookServerAppLabels(),
+					Name:            server.WebhookServerDeploymentName,
+					Namespace:       namespace,
+					Labels:          server.WebhookServerAppLabels(),
+					OwnerReferences: []metav1.OwnerReference{*ref},
 				},
 				Spec: corev1.PodSpec{
 					Containers: []corev1.Container{
@@ -128,6 +141,23 @@ func getSpecDeployment(namespace string) (*appsv1.Deployment, error) {
 								},
 								{
 									Name: "WATCH_NAMESPACE",
+								},
+							},
+							Lifecycle: &corev1.Lifecycle{
+								PreStop: &corev1.Handler{
+									Exec: &corev1.ExecAction{
+										Command: []string{
+											"/usr/local/bin/prestop",
+										},
+									},
+								},
+							},
+							Resources: corev1.ResourceRequirements{
+								Limits: corev1.ResourceList{
+									corev1.ResourceMemory: resource.MustParse("150Mi"),
+								},
+								Requests: corev1.ResourceList{
+									corev1.ResourceMemory: resource.MustParse("150Mi"),
 								},
 							},
 						},

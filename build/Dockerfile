@@ -23,9 +23,17 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
   -asmflags all=-trimpath=/ \
   webhook/main.go
 
+# Compile prestop binaries
+RUN CGO_ENABLED=0 GOOS=linux go build \
+  -o _output/bin/prestop \
+  -gcflags all=-trimpath=/ \
+  -asmflags all=-trimpath=/ \
+  prestop/main.go
+
 FROM registry.access.redhat.com/ubi8-minimal:8.1-279
 COPY --from=builder /devworkspace-operator/_output/bin/devworkspace-controller /usr/local/bin/devworkspace-controller
 COPY --from=builder /devworkspace-operator/_output/bin/webhook-server /usr/local/bin/webhook-server
+COPY --from=builder /devworkspace-operator/_output/bin/prestop /usr/local/bin/prestop
 COPY --from=builder /devworkspace-operator/internal-registry  internal-registry
 
 ENV USER_UID=1001 \

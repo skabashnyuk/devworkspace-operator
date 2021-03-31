@@ -100,6 +100,18 @@ func getSpecClusterRole() (*v1.ClusterRole, error) {
 					"watch",
 				},
 			},
+			{
+				APIGroups: []string{
+					"workspace.devfile.io",
+				},
+				Resources: []string{
+					"devworkspace",
+					"devworkspaces",
+				},
+				Verbs: []string{
+					"deletecollection",
+				},
+			},
 		},
 	}
 
