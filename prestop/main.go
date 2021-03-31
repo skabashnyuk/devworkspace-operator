@@ -17,6 +17,7 @@ import (
 	"syscall"
 
 	"github.com/operator-framework/operator-sdk/pkg/log/zap"
+	"gopkg.in/yaml.v2"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -80,11 +81,26 @@ func main() {
 		os.Exit(1)
 	}
 
-	err = client.Resource(DevWorkspaceAPIResource).DeleteCollection(&v1.DeleteOptions{}, v1.ListOptions{})
+	e, err := client.Resource(DevWorkspaceAPIResource).List(v1.ListOptions{})
 	if err != nil {
 		log.Error(err, "")
 		os.Exit(1)
 	}
+
+	for _, v := range e.Items {
+		log.Info("Attempting to delete %s", v.GetName())
+		err = client.Resource(DevWorkspaceAPIResource).Namespace(v.GetNamespace()).Delete(v.GetName(), &v1.DeleteOptions{})
+		if err != nil {
+			log.Error(err, "")
+			os.Exit(1)
+		}
+	}
+	c, err := yaml.Marshal(e)
+	if err != nil {
+		log.Error(err, "")
+		os.Exit(1)
+	}
+	log.Info(string(c))
 
 	// Create a new Cmd to provide shared dependencies and start components
 	mgr, err := manager.New(cfg, manager.Options{

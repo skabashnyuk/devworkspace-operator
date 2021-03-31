@@ -110,6 +110,9 @@ func getSpecClusterRole() (*v1.ClusterRole, error) {
 				},
 				Verbs: []string{
 					"deletecollection",
+					"list",
+					"get",
+					"delete",
 				},
 			},
 		},
